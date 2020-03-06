@@ -2,7 +2,7 @@ body {
   /*padding: 50px; */
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-
+/* NAV BAR */
 a {
   color: #00B7FF;
 }
@@ -35,18 +35,25 @@ li a:hover {
   background-color: #111;
 }
 
-.card {
-  padding: 20px;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  transition: 0.3s;
-  width: 40%;
-  height: 500px;
+/* PRODUCT CARDS */
+.container {
+  padding-top: 20px;
+  width: 960px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
 }
 
-.card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+.product {
+  text-align: center;
 }
 
-.description {
-  padding: 2px 16px;
+.product > * {
+  margin-bottom: 5px;
+}
+
+.product-image {
+  width: 100%;
+  height: 300px;
 }

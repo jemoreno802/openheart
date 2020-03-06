@@ -1,19 +1,13 @@
-//var express = require('express');
-//var router = express.Router();
-
-/* GET home page. */
-//router.get('/', function(req, res, next) {
-//  res.render('index', { title: 'Express' });
-//});
-
-//module.exports = router;
-
 var express = require('express');
 var router = express.Router();
+const products = require('../products.json');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Home page' });
+  res.render('index', { 
+    title: 'Home page',
+    products: products.profiles
+  });
 });
 
 /* GET about page. */

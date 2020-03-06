@@ -1,10 +1,14 @@
 extends layout
 
 block content
-  div 
-    .card
-      img(src='/images/grand_canyon.JPG' alt='Grand Canyon Watercolor' style='width:33%')
-      div
-        .description
-         h4  
-            b Grand Canyon Watercolor
+  div.container
+    each product in products
+      div.product
+        //div.product-image(style=`background: url('/images/${person.imgSrc}') top center
+        //no-repeat; background-size: cover;`)
+        div.images
+          img(src='/images/grand_canyon.jpg' alt='Grand Canyon Watercolor' style='width:100%')
+        h2.product-name
+          | #{product.productname} 
+        a(href=`/profile?id=${product.id}`)
+          | Purchase
