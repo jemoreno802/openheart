@@ -4,11 +4,11 @@ block content
   div.container
     each product in products
       div.product
-        //div.product-image(style=`background: url('/images/${person.imgSrc}') top center
-        //no-repeat; background-size: cover;`)
         div.images
-          img(src='/images/grand_canyon.jpg' alt='Grand Canyon Watercolor' style='width:100%')
+          img(src=product.p_image alt=product.p_description style='width:100%')
         h2.product-name
-          | #{product.productname} 
-        a(href=`/profile?id=${product.id}`)
+          | #{product.p_name} 
+        h3.product-price
+          | $#{product.p_price}
+        a(href=`/profile?id=${product.p_id}`)
           | Purchase

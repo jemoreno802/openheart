@@ -3,11 +3,26 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+var mysql = require('mysql');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+var db = mysql.createConnection({
+  host: 'localhost',
+  user:'root',
+  password: 'password',
+  database: 'openheart_db'
+});
+
+db.connect((err) => {
+  if(err) {
+    throw err;
+  }
+  console.log('connected to database');
+});
+global.db = db;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

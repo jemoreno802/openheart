@@ -4,10 +4,17 @@ const products = require('../products.json');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { 
-    title: 'Home page',
-    products: products.profiles
+  let query = "SELECT * FROM openheart_db.products;";
+  db.query(query, (err, result)=>{
+    if(err) {
+      res.redirect('/');
+    }
+    res.render('index', { 
+      title: 'Home page',
+      products: result
+    });
   });
+  
 });
 
 /* GET about page. */
