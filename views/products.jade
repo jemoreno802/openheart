@@ -1,5 +1,14 @@
 extends layout
 
 block content
-  h1 #{pageText}
-  p none yet 
+  div.container
+    each product in products
+      div.product
+        div.images
+          img(src=product.p_image alt=product.p_description style='width:100%')
+        h2.product-name
+          | #{product.p_name} 
+        h3.product-price
+          | $#{product.p_price}
+        a(href=`/cart/add/${product.p_id}`) 
+          | Add to cart

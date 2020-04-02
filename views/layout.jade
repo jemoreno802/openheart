@@ -11,8 +11,13 @@ html
                 li
                     a(href='//localhost:3000/') Home
                 li
-                    a(href='//localhost:3000/about') About
-                li
                     a(href='//localhost:3000/products') Products
+                li
+                    a(href='//localhost:3000/cart/checkout') My Cart(
+                        if(typeof sess.cart !== "undefined")
+                            | #{sess.cart.length})
+                        else    
+                            | 0)
+                    
         block content
 
