@@ -33,7 +33,8 @@ router.get('/add/:prod_id', function(req,res) {
 });
 
 router.get('/checkout', function(req,res) {
-    res.render('cart', {pageText: 'Items in cart:'} );
+
+    res.render('cart', {pageText: 'Items in cart:', cart: req.session.cart} );
 });
 
 module.exports = router;

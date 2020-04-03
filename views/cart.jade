@@ -2,4 +2,13 @@ extends layout
 
 block content
   h1 #{pageText}
-  p none yet 
+  div.container
+  if(typeof cart !== "undefined")
+    each item in cart
+       h3.id
+          | Product ID: #{item.id}, Quantity: #{item.qty}
+   else
+      h1 Empty Cart
+
+
+        
