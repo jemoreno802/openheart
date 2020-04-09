@@ -13,19 +13,12 @@ html
                 li
                     a(href='//localhost:3000/products') Products
                 li
-                    a(href='//localhost:3000/cart/checkout') My Cart(
-                        if(typeof sess !== "undefined")
-                            if(typeof sess.cart !== "undefined")
-                                | #{sess.cart.length})
-                            else    
-                                | 0)
-                        else
-                            | 0)
+                    a(href='//localhost:3000/cart/checkout') My Cart
                 li(style='float:right')
                     a(href='//localhost:3000/login')
                         if(typeof sess !== "undefined")
                             if(typeof sess.user !== "undefined")
-                                | Logout
+                                | Logout #{sess.user}
                             else
                                 | Login    
                         else
