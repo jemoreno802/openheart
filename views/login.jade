@@ -1,0 +1,8 @@
+extends layout
+
+block content
+   div.modal
+      div.modal-content
+         span.close(onclick='modal.style.display = "block";') X
+         a(href='/login/loginClick')
+           button(type='button' onclick='modal.style.display = "block";') Login

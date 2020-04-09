@@ -3,9 +3,8 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req,res, next){
-  sess = req.session;
-  console.log("sessionID: " + req.sessionID);
-  res.render('index');
+  
+  res.render('index', {user: ""});
 });
 
 /* GET about page. */
