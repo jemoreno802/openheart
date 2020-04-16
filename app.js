@@ -4,8 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mysql = require('mysql');
-var session = require('express-session')
-
+var session = require('express-session');
+var querystring = require('querystring');
+var bodyparser = require('body-parser');
+var csurf = require('csurf');
+//routers
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var cartRouter = require('./routes/cart');
@@ -29,7 +32,6 @@ db.connect((err) => {
 });
 global.db = db;
 
-//global session, MUST CHANGE if I implement login functionality for multiple users
 global.sess;
 
 // view engine setup
@@ -46,8 +48,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false,
+  cookie: {
+    secure: true
+  }
 }));
+
+//csurf middleware
+app.use(csurf());
+//set csurf token for request
+app.use(function(req, res, next) {
+  console.log("CSURF token set");
+  res.locals._csrf = req.csrfToken();
+  next();
+});
 
 //setup routers
 app.use('/', indexRouter);
@@ -77,5 +91,13 @@ app.get('*', function(req,res,next) {
   res.locals.cart = req.session.cart;
   next();
 });
+
+//support JSON and URL encoded bodies
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({extended: true}));
+
+//https.createServer(options, app).listen(3000, function(){
+  //console.log('server started: listening on port 3000');
+//});
 
 module.exports = app;

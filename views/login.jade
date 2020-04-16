@@ -5,8 +5,8 @@ block content
       div.modal-content
          span.close(onclick='modal.style.display = "block";') X
          form(action = '/login' method = "POST")
+            input(type="hidden", name="_csrf", value="#{csrfToken}")
             input(name = "username" type = "text" required placeholder = "Username")
             input(name = "password" type = "password" required placeholder = "Password")
             button(type = "Submit") Login
-            p #{message}
-         
+            p #{message}         
