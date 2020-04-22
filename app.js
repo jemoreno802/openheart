@@ -7,6 +7,9 @@ var mysql = require('mysql');
 var session = require('express-session');
 var querystring = require('querystring');
 var bodyparser = require('body-parser');
+var crypto = require('crypto');
+var squareConnect = require('square-connect');
+var fetch = require('node-fetch');
 var csurf = require('csurf');
 //routers
 var indexRouter = require('./routes/index');
@@ -54,6 +57,9 @@ app.use(session({
   }
 }));
 
+//cart router BEFORE csurf middleware to ignore csurf info since this route uses Square api to create form, cant inject csurftoken
+app.use('/cart', cartRouter);
+
 //csurf middleware
 app.use(csurf());
 //set csurf token for request
@@ -66,7 +72,6 @@ app.use(function(req, res, next) {
 //setup routers
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/cart', cartRouter);
 app.use('/products', productsRouter);
 app.use('/login', loginRouter);
 
@@ -96,8 +101,8 @@ app.get('*', function(req,res,next) {
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: true}));
 
-//https.createServer(options, app).listen(3000, function(){
-  //console.log('server started: listening on port 3000');
-//});
+
+
+
 
 module.exports = app;
