@@ -1,15 +1,18 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/add/:prod_id', function(req,res) {
+router.get('/add/:prod_id/images/:prod_img', function(req,res) {
     var prod = req.params.prod_id;
-    console.log("adding:" + prod);
+    var img = "/images/" + req.params.prod_img;
+
+    console.log("adding:" + prod + " with image: " + img);
     if(typeof req.session.cart == "undefined") { //if there isn't a cart defined, create a new one and add first product
         console.log("cart undefined");
         req.session.cart = [];
         req.session.cart.push({
             id: prod,
-            qty: 1
+            qty: 1, 
+            image: img
         });
     } else { //if the session already has a cart, look to see if it already has the item. if so, increase quantity. if not, add new item
         var cart = req.session.cart;
@@ -24,7 +27,8 @@ router.get('/add/:prod_id', function(req,res) {
         if(newItem) {
             req.session.cart.push({
                 id: prod,
-                qty: 1
+                qty: 1,
+                image: img
             });
         }
     }
@@ -34,6 +38,10 @@ router.get('/add/:prod_id', function(req,res) {
 
 router.get('/checkout', function(req,res) {
     res.render('cart', {pageText: 'Items in cart:', cart: req.session.cart} );
+});
+
+router.get('/checkoutpage', function(req,res) {
+    res.render('checkoutpage', {cart: req.session.cart});
 });
 
 module.exports = router;

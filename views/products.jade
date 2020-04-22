@@ -10,5 +10,5 @@ block content
           | #{product.p_name} 
         h3.product-price
           | $#{product.p_price}
-        a(href=`/cart/add/${product.p_id}`)
+        a(href=`/cart/add/${product.p_id}${product.p_image}`)
           | Add to cart

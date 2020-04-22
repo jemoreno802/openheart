@@ -2,11 +2,16 @@ extends layout
 
 block content
   h1 #{pageText}
-  div.container
   if(typeof cart !== "undefined")
-    each item in cart
-       h3.id
-          | Product ID: #{item.id}, Quantity: #{item.qty}
+    div.container
+      each item in cart
+        div.item
+          div.images
+            img(src=item.image, alt="alternate" style='width:100%')
+          h3.id
+            | Product ID: #{item.id}, Quantity: #{item.qty}
+    a(href='/cart/checkoutpage')
+        | Check out
    else
       h1 Empty Cart
 
