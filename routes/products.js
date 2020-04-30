@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+//This is the router for the products page. It queries the database for all available products
+//and then renders the products template, passing the products in as a variable to the page
 router.get('/', function(req, res, next) {
-  
-  //DB query to pass along products
   let query = "SELECT * FROM openheart_db.products;";
   db.query(query, (err, result)=>{
     if(err) {
@@ -15,7 +15,6 @@ router.get('/', function(req, res, next) {
       layout: 'layout'
     });
   });
-  
 });
 
 module.exports = router;

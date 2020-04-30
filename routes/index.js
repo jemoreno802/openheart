@@ -12,9 +12,4 @@ router.get('/', function(req,res, next){
   res.render('index', {user: usr});
 });
 
-/* GET about page. */
-router.get('/about', function(req, res, next){
-  res.render('about', {pageTitle: 'About'} );
-});
-
 module.exports = router;

@@ -5,12 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mysql = require('mysql');
 var session = require('express-session');
-var querystring = require('querystring');
 var bodyparser = require('body-parser');
-var crypto = require('crypto');
-var squareConnect = require('square-connect');
-var fetch = require('node-fetch');
 var csurf = require('csurf');
+
 //routers
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -34,7 +31,6 @@ db.connect((err) => {
   console.log('connected to database');
 });
 global.db = db;
-
 global.sess;
 
 // view engine setup
@@ -100,9 +96,5 @@ app.get('*', function(req,res,next) {
 //support JSON and URL encoded bodies
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: true}));
-
-
-
-
 
 module.exports = app;

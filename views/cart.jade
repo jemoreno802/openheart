@@ -1,5 +1,6 @@
 extends layout
 
+//This page contains pictures of the items in a person's cart, and a button to check out
 block content
   h1 #{pageText}
   if(typeof cart !== "undefined")
@@ -10,8 +11,8 @@ block content
             img(src=item.image, alt="alternate" style='width:100%')
           h3.id
             | Product ID: #{item.id}, Quantity: #{item.qty}
-    a(href='/cart/checkoutpage')
-        | Check out
+    form(action = '/cart/checkoutinfo' method = "GET")
+        button.button-credit-card(type = "Submit") Checkout
    else
       h1 Empty Cart
 

@@ -1,9 +1,9 @@
 extends layout
 
+//This page contains a popup modal for the user to log into their account
 block content
    div.modal
       div.modal-content
-         span.close(onclick='modal.style.display = "block";') X
          form(action = '/login' method = "POST")
             input(type="hidden", name="_csrf", value="#{csrfToken}")
             input(name = "username" type = "text" required placeholder = "Username")

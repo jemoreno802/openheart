@@ -6,17 +6,12 @@ var squareConnect = require('square-connect');
 //square integration
 const accessToken = "EAAAEAeatq9G4g_cBlQGgGnOEHXwko09IHmE6sykwZ1xLuR2PqgLRqkglGwDplwp";
 const defaultClient = squareConnect.ApiClient.instance;
-
 // Configure OAuth2 access token for authorization: oauth2
 const oauth2 = defaultClient.authentications['oauth2'];
 oauth2.accessToken = accessToken;
-
-// Set 'basePath' to switch between sandbox env and production env
-// sandbox: https://connect.squareupsandbox.com
-// production: https://connect.squareup.com
 defaultClient.basePath = 'https://connect.squareupsandbox.com';
 
-
+//adds a product to the cart
 router.get('/add/:prod_id/images/:prod_img', function(req,res) {
     var prod = req.params.prod_id;
     var img = "/images/" + req.params.prod_img;
@@ -52,18 +47,25 @@ router.get('/add/:prod_id/images/:prod_img', function(req,res) {
     res.redirect('back'); //change this to render a confirm page
 });
 
+//TODO: change to /mycart
 router.get('/checkout', function(req,res) {
     res.render('cart', {pageText: 'Items in cart:', cart: req.session.cart} );
 });
 
-router.get('/checkoutpage', function(req,res) {
-    res.render('checkoutpage', {cart: req.session.cart});
+//page with form for shipping info
+router.get('/checkoutinfo', function(req, res) {
+    //console.log(req.csrfToken());
+    res.render('checkoutinfo', {cart: req.session.cart, csrfToken: req.csrfToken});
 });
 
+//page with credit card payment 
+router.post('/checkoutpayment', function(req, res) {
+    res.render('checkoutpage', {cart: req.session.cart}); //TODO rename
+});
+
+//processes square payment
 router.post('/process-payment', async (req, res) => {
     const request_params = req.body;
-  
-    // length of idempotency_key should be less than 45
     const idempotency_key = crypto.randomBytes(22).toString('hex');
   
     // Charge the customer's card

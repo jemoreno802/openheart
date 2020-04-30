@@ -2,6 +2,7 @@ body {
   /*padding: 50px; */
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
+
 /* NAV BAR */
 a {
   color: #00B7FF;
@@ -39,6 +40,13 @@ li a:hover {
   width: 300px;
 }
 
+#center {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
 /* PRODUCT CARDS */
 .container {
   padding-top: 20px;
@@ -62,6 +70,7 @@ li a:hover {
   height: 300px;
 }
 
+/* LOGIN FORM */
 .modal {
   /* display: none; Hidden by default */
   position: fixed; /* Stay in place */
@@ -103,9 +112,7 @@ li a:hover {
   cursor: pointer;
 }
 
-
-
-
+/* Square form CSS */
 
 * {
   -webkit-font-smoothing: antialiased;
@@ -131,12 +138,21 @@ fieldset {
   border: 0;
 }
 
+#box {
+  width: 50%;
+  display: flex;
+  padding: 350px;
+  padding-top: 50px;
+  margin-top: 150px;
+}
+
 #form-container {
   position: relative;
-  width: 380px;
+  width: 500px;
   margin: 0 auto;
   top: 50%;
   transform: translateY(-50%);
+  flex: 0 0 65%;
 }
 
 .third {
@@ -152,11 +168,11 @@ fieldset {
 
 /* Define how SqPaymentForm iframes should look */
 .sq-input {
-  height: 56px;
+  height: 46px;
   box-sizing: border-box;
   border: 1px solid #E0E2E3;
   background-color: white;
-  border-radius: 6px;
+  border-radius: 5px;
   display: inline-block;
   -webkit-transition: border-color .2s ease-in-out;
      -moz-transition: border-color .2s ease-in-out;

@@ -30,7 +30,7 @@ router.post('/', function(req,res) {
                 res.render('index', {user: req.body.username}); 
             } else{ //if result.length is undefined, there is no user matching the credentials
                 console.log("incorrect credentials");
-                res.render('login', {message: "incorrect credentials"});
+                res.render('login', {message: "incorrect credentials", csrfToken: req.csrfToken()});
             }
         }
     });
