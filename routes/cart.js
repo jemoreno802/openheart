@@ -18,7 +18,7 @@ router.get('/add/:prod_id/images/:prod_img', function(req,res) {
     var pprice = getProductPrice(prod);
     console.log("adding:" + prod + " with image: " + img);
     if(typeof req.session.cart == "undefined") { //if there isn't a cart defined, create a new one and add first product
-        console.log("cart undefined");
+        console.log("Cart undefined, creating new cart");
         req.session.cart = [];
         req.session.cart.push({
             id: prod,
@@ -29,6 +29,7 @@ router.get('/add/:prod_id/images/:prod_img', function(req,res) {
     } else { //if the session already has a cart, look to see if it already has the item. if so, increase quantity. if not, add new item
         var cart = req.session.cart;
         var newItem = true;
+        console.log("Cart exists, adding to cart");
         for(var i=0; i<cart.length;i++) {
             if (cart[i].id == prod) {
                 cart[i].qty++;
@@ -47,7 +48,7 @@ router.get('/add/:prod_id/images/:prod_img', function(req,res) {
         }
     }
     console.log(req.session.cart);
-    res.redirect('back'); //change this to render a confirm page
+    res.redirect('back');
 });
 
 //render page with cart contents
@@ -67,7 +68,6 @@ router.get('/checkoutinfo', function(req, res) {
 
 //processes the checkout information and then renders page with credit card payment 
 router.post('/checkoutpayment', function(req, res) {
-    //TODO:insert the stuff into the database, generate order ID, THEN re
 
     req.session.paymentinfo = [];
     req.session.paymentinfo.push({
@@ -76,7 +76,6 @@ router.post('/checkoutpayment', function(req, res) {
         phonenum: req.body.phonenum, 
         addr: req.body.addr
     });
-    //console.log("PAYMENT INFOS" + JSON.stringify(req.session.paymentinfo));
     res.render('checkoutpayment', {cart: req.session.cart});
 });
 
@@ -85,13 +84,12 @@ router.post('/process-payment', async (req, res) => {
     const request_params = req.body;
     const idempotency_key = crypto.randomBytes(22).toString('hex');
     const paymentinfos = req.session.paymentinfo;
-    console.log("PAYMENT INFOSquare" + JSON.stringify(paymentinfos));
     // Charge the customer's card
     const payments_api = new squareConnect.PaymentsApi();
     const request_body = {
       source_id: request_params.nonce,
       amount_money: {
-        amount: 100, // $1.00 charge
+        amount: 100, // $1.00 charge, did not get around to making this the order price
         currency: 'USD'
       },
       idempotency_key: idempotency_key
@@ -99,8 +97,7 @@ router.post('/process-payment', async (req, res) => {
   
     try {
       const response = await payments_api.createPayment(request_body);
-      //here do the stuff
-
+      //insert into orders table 
       let query = "INSERT INTO order_details(email,shipping_addr) VALUES ('" + paymentinfos[0].email + "','" + paymentinfos[0].addr + "');";
       console.log(query);
       var orderID;
@@ -125,6 +122,7 @@ router.post('/process-payment', async (req, res) => {
       });
     }
   });
+
 
 function getProductPrice(id) {
     prods = JSON.parse(globalproducts);

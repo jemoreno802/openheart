@@ -61,7 +61,6 @@ app.use('/cart', cartRouter);
 app.use(csurf());
 //set csurf token for request
 app.use(function(req, res, next) {
-  console.log("CSURF token set");
   res.locals._csrf = req.csrfToken();
   next();
 });
