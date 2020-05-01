@@ -2,11 +2,11 @@ extends layout
 
 //This page contains a form with all of the user information for the order
 block content
-   p User Information
-   div#user-info
+   p#center User Information
+   div#box
       div#form-container
-      form(action = '/cart/checkoutpayment' method = "POST")
+        form(action = '/cart/checkoutpayment' method = "POST")
             input(name = "email" type = "text" required placeholder = "Email")
             input(name = "phonenum" type = "text" required placeholder = "Phone Number")
             input(name = "addr" type = "text" required placeholder = "Shipping Address")
-            button(type = "Submit") Continue to payment 
+            button.button-submit(type = "Submit") Continue to payment 

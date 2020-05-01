@@ -11,10 +11,12 @@ block content
             img(src=item.image, alt="alternate" style='width:100%')
           h3.id
             | Product ID: #{item.id}, Quantity: #{item.qty}
-    form(action = '/cart/checkoutinfo' method = "GET")
-        button.button-credit-card(type = "Submit") Checkout
+    h3#center Cart Total: $#{total}.00
+    div#box2
+        form(action = '/cart/checkoutinfo' method = "GET")
+            button.button-submit(type = "Submit") Checkout
    else
-      h1 Empty Cart
+      p Empty Cart
 
 
         

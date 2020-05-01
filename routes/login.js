@@ -26,7 +26,7 @@ router.post('/', function(req,res) {
                 console.log("authenticated user : " + req.body.username);
                 sess = req.session; //assign session and session user
                 sess.user = req.body.username;
-                req.session.cart = undefined;
+                //req.session.cart = undefined;
                 res.render('index', {user: req.body.username}); 
             } else{ //if result.length is undefined, there is no user matching the credentials
                 console.log("incorrect credentials");

@@ -9,8 +9,8 @@ router.get('/', function(req, res, next) {
     if(err) {
       res.redirect('/');
     }
+    globalproducts = JSON.stringify(result);
     res.render('products', { 
-      title: 'Home page',
       products: result,
       layout: 'layout'
     });

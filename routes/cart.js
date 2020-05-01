@@ -15,7 +15,7 @@ defaultClient.basePath = 'https://connect.squareupsandbox.com';
 router.get('/add/:prod_id/images/:prod_img', function(req,res) {
     var prod = req.params.prod_id;
     var img = "/images/" + req.params.prod_img;
-
+    var pprice = getProductPrice(prod);
     console.log("adding:" + prod + " with image: " + img);
     if(typeof req.session.cart == "undefined") { //if there isn't a cart defined, create a new one and add first product
         console.log("cart undefined");
@@ -23,7 +23,8 @@ router.get('/add/:prod_id/images/:prod_img', function(req,res) {
         req.session.cart.push({
             id: prod,
             qty: 1, 
-            image: img
+            image: img,
+            price: pprice
         });
     } else { //if the session already has a cart, look to see if it already has the item. if so, increase quantity. if not, add new item
         var cart = req.session.cart;
@@ -32,6 +33,7 @@ router.get('/add/:prod_id/images/:prod_img', function(req,res) {
             if (cart[i].id == prod) {
                 cart[i].qty++;
                 newItem=false;
+                //dont adjust price because we will multiply by qty at cart checkout
                 break;
             }
         }
@@ -39,7 +41,8 @@ router.get('/add/:prod_id/images/:prod_img', function(req,res) {
             req.session.cart.push({
                 id: prod,
                 qty: 1,
-                image: img
+                image: img,
+                price: pprice
             });
         }
     }
@@ -47,27 +50,42 @@ router.get('/add/:prod_id/images/:prod_img', function(req,res) {
     res.redirect('back'); //change this to render a confirm page
 });
 
-//TODO: change to /mycart
-router.get('/checkout', function(req,res) {
-    res.render('cart', {pageText: 'Items in cart:', cart: req.session.cart} );
+//render page with cart contents
+router.get('/mycart', function(req,res) {
+    //calculate total price of cart
+    req.session.cart.total = 0;
+    for(var i=0; i<req.session.cart.length;i++) {
+        req.session.cart.total += (req.session.cart[i].price * req.session.cart[i].qty);
+    }
+    res.render('cart', {pageText: 'Items in cart:', cart: req.session.cart, total: req.session.cart.total} );
 });
 
-//page with form for shipping info
+//render page with form for shipping info
 router.get('/checkoutinfo', function(req, res) {
-    //console.log(req.csrfToken());
-    res.render('checkoutinfo', {cart: req.session.cart, csrfToken: req.csrfToken});
+    res.render('checkoutinfo', {cart: req.session.carts});
 });
 
-//page with credit card payment 
+//processes the checkout information and then renders page with credit card payment 
 router.post('/checkoutpayment', function(req, res) {
-    res.render('checkoutpage', {cart: req.session.cart}); //TODO rename
+    //TODO:insert the stuff into the database, generate order ID, THEN re
+
+    req.session.paymentinfo = [];
+    req.session.paymentinfo.push({
+        orderno: 12345,
+        email: req.body.email,
+        phonenum: req.body.phonenum, 
+        addr: req.body.addr
+    });
+    //console.log("PAYMENT INFOS" + JSON.stringify(req.session.paymentinfo));
+    res.render('checkoutpayment', {cart: req.session.cart});
 });
 
 //processes square payment
 router.post('/process-payment', async (req, res) => {
     const request_params = req.body;
     const idempotency_key = crypto.randomBytes(22).toString('hex');
-  
+    const paymentinfos = req.session.paymentinfo;
+    console.log("PAYMENT INFOSquare" + JSON.stringify(paymentinfos));
     // Charge the customer's card
     const payments_api = new squareConnect.PaymentsApi();
     const request_body = {
@@ -81,10 +99,25 @@ router.post('/process-payment', async (req, res) => {
   
     try {
       const response = await payments_api.createPayment(request_body);
+      //here do the stuff
+
+      let query = "INSERT INTO order_details(email,shipping_addr) VALUES ('" + paymentinfos[0].email + "','" + paymentinfos[0].addr + "');";
+      console.log(query);
+      var orderID;
+      db.query(query, (err, result)=> {
+        if(err){
+            res.redirect('/');
+        }
+        orderID = result.insertId;//this wont always work since javascript wont wait for this value to be set before sending the response
+        //BUT, it will always update the database so the info is not lost
+      });
+
       res.status(200).json({
         'title': 'Payment Successful',
-        'result': response
+        'result': response, 
+        'order' : orderID
       });
+      
     } catch(error) {
       res.status(500).json({
         'title': 'Payment Failure',
@@ -92,5 +125,14 @@ router.post('/process-payment', async (req, res) => {
       });
     }
   });
+
+function getProductPrice(id) {
+    prods = JSON.parse(globalproducts);
+    for(var i = 0; i<prods.length; i++){
+        if(prods[i].p_id == id) {
+            return prods[i].p_price;
+        }
+    }
+}
 
 module.exports = router;

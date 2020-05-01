@@ -32,6 +32,7 @@ db.connect((err) => {
 });
 global.db = db;
 global.sess;
+global.globalproducts;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

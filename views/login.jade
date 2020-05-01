@@ -6,7 +6,7 @@ block content
       div.modal-content
          form(action = '/login' method = "POST")
             input(type="hidden", name="_csrf", value="#{csrfToken}")
-            input(name = "username" type = "text" required placeholder = "Username")
-            input(name = "password" type = "password" required placeholder = "Password")
-            button(type = "Submit") Login
+            input.middle(name = "username" type = "text" required placeholder = "Username")
+            input.middle(name = "password" type = "password" required placeholder = "Password")
+            button.button-submit(type = "Submit") Login
             p #{message}         
